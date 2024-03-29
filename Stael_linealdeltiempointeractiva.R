@@ -7,7 +7,7 @@ library(readxl)
 
 # UI
     ui <- fluidPage(
-      titlePanel("Línea de Tiempo de Eventos Interactiva #test
+      titlePanel("Línea de Tiempo de Eventos Interactiva"),
       sidebarLayout(
         sidebarPanel(
           # filtrar por localización
