@@ -1,0 +1,47 @@
+library(ggplot2)
+library(gganimate)
+library(readxl)
+library(rnaturalearth)
+library(sf)
+library(tidyverse)
+
+# Data upload
+datos <- read_excel("~/GitHub/RstudioPV/StaelTimeline.xlsx") 
+datos$Date <- as.numeric(as.character(datos$Date))
+
+#Europe Map
+europa <- rnaturalearth::ne_countries(scale = "medium", returnclass = "sf")
+europa <- europa[europa$continent == "Europe", ]
+datos_mapa <- merge(europa, datos, by.x = "name", by.y = "Localization")
+
+animacion <- ggplot(datos_mapa) +
+  geom_sf(data = europa, fill = "lightgray", color = "white") +  
+  geom_sf(data = datos_mapa, aes(fill = Event)) +
+  coord_sf(xlim = c(-10, 40), ylim = c(35, 70), expand = FALSE) +
+  transition_time(Date) +
+  labs(title = " Año {as.integer(frame_time)}")+
+  theme_minimal()
+
+# save  GIF
+animate(animacion, duration = 21, fps = 2, dpi = 120, width = 800, height = 600, renderer = gifski_renderer("animacion_europa.gif"))
+
+# Viewer de RStudio 
+utils::browseURL("animacion_europa.gif")
+
+
+####################################################### Shiny ###########################################
+#########################################################################################################
+
+library(shiny)
+library(leaflet)
+library(sf)
+library(rnaturalearth)
+library(readxl)
+library(dplyr)
+library(tidyverse)
+
+
+datos <- read_excel("~/GitHub/RstudioPV/StaelTimeline.xlsx")  
+print(head(datos))
+
+
