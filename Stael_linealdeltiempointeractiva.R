@@ -3,10 +3,16 @@ library(timevis)
 library(shiny)
 library(plotly)
 library(readxl)
+<<<<<<< Updated upstream
 #Libraries for maping
 library(rworldmap)
 library(leaflet)
 library(maps)
+=======
+library(sf)
+library(ggrepel)
+library(igraph)
+>>>>>>> Stashed changes
 
 # UI
     ui <- fluidPage(

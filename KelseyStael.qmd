@@ -1,4 +1,106 @@
+---
+title: "Stael circulating in the early US"
+author: "Kelsey Brod"
+format: gfm
+toc: true
+editor_options: 
+chunk_output_type: inline
+---
+
+
+
 ```{r}
+#| label: setup
+#| include: false
+
+# load packages
+library(tidyverse)
+##library(ggrepel)
+library(readxl)
+##library(sf)
+library(patchwork)
+
+library(tidyverse)
+install.packages("devtools")
+devtools::install_github("r-lib/conflicted")
+library(readr)
+library(plotrix)
+library(ggplot2)
+library(plotly)
+library(igraph)
+library(visNetwork)
+
+# set default theme for ggplot2
+ggplot2::theme_set(ggplot2::theme_minimal(base_size = 14))
+
+# set default figure parameters for knitr
+knitr::opts_chunk$set(
+  fig.width = 8,
+  fig.asp = 0.618,
+  fig.retina = 3,
+  dpi = 300,
+  out.width = "90%"
+)
+```
+
+```{r}
+#Bring data to R
+correspondence <- read_csv('~/Documents/GitHub/RstudioPV/data/US_LettersMentioningStael.csv', show_col_types = FALSE)
+show (correspondence)
+
+grafo <- graph_from_data_frame(correspondence, directed = TRUE)
+# Network letters
+plot(grafo, layout = layout.circle, edge.arrow.size = 0.5, vertex.label.cex = 1.5)
+
+#Show date of the letter -- the idea is to use this data later 
+fechas <- as.Date(correspondence$`Date (MM/DD/YYYY)` 
+                    , format = "%m/%d/%Y")
+E(grafo)$fecha <- fechas
+plot(grafo, layout = layout.circle, edge.arrow.size = 0.5, vertex.label.cex = 1.5)
+
+# graph with dates
+plot(
+  grafo,
+  layout = layout.circle,
+  edge.arrow.size = 0.5,
+  vertex.label.cex = 1.5,
+  edge.label = E(grafo)$fecha # Mostrar las fechas como etiquetas de las aristas
+)
+
+```
+
+
+
+
+```{r}
+
+#graph associated to degree
+grados <- degree(grafo)
+plot(
+  grafo,
+  layout = layout.circle,
+  edge.arrow.size = 0.5,
+  vertex.label.cex = 1.5,
+  #edge.label = E(grafo)$fecha, # add this to show dates 
+  vertex.size = grados * 3 
+)
+
+# gráfica del grado de cada nodo con ejes intercambiados y nombres de nodos horizontales
+barplot(grados, horiz = TRUE, names.arg = V(grafo)$name, xlab = "Grado", ylab = "Nodos", main = "Node Degree", las = 1)
+
+max_width <- max(strwidth(V(grafo)$name))
+
+# with colors
+barplot(grados, horiz = TRUE, names.arg = V(grafo)$name, xlab = "Grado", main = "Node Degree",
+        col = rainbow(length(grados)), 
+        border = "black", # Color del borde 
+        density = 30, 
+        width = max_width / 10, #para que se vea todo
+        las = 1, # Orientación horizontal 
+        cex.axis = 0.8, 
+        cex.main = 1.2, 
+        cex.names = 0.7
+)
 
 ```
 
