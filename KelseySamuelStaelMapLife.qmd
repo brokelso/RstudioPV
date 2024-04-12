@@ -1,3 +1,6 @@
+
+
+```{r}
 library(tidyverse)
 library(readr)
 library(ggplot2)
@@ -5,6 +8,9 @@ library(gganimate)
 library(readxl)
 library(rnaturalearth)
 library(sf)
+
+```
+
 
 # Data upload
 datos <- read_excel("~/Documents/GitHub/RstudioPV/data/StaelTimeline.xlsx") 
