@@ -1,8 +1,6 @@
 ### Network letters about Stael ###
-install.packages("igraph")
-library(shiny)
+
 library(visNetwork)
-library(networkD3)
 library(igraph)
 library(readr)
 library(dplyr)
